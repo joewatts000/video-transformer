@@ -22,8 +22,13 @@
 		if (isFrame) {
 			video.style.display = 'none';
 			image.style.display = 'none';
+			loaded = false;
+			iframe.onload = () => {
+				console.log('hi');
+				loaded = true;
+			};
 			iframe.style.display = 'block';
-			iframe.src = url;
+			iframe.src = `https://www.hlsplayer.org/play?url=${url}`;
 		} else if (isImg) {
 			video.style.display = 'none';
 			iframe.style.display = 'none';
@@ -103,6 +108,9 @@
 				<input type="range" min="0" max="360" value="0" id="hue" on:change={changeHue} on:input={changeHue} />
 			</div>
 		</div>
+		{#if !loaded}
+		<div class="loader"></div>
+	{/if}
 		<video id="video" controls>
 			<source src="" type="video/mp4" />
 			Your browser does not support the video tag.
@@ -110,9 +118,6 @@
 		</video>
 		<iframe id="iframe" src="" frameBorder="0" width="100%" allowFullScreen title=""></iframe>
 		<img id="image" src="" alt="" />
-	{#if !loaded}
-		<div class="loader"></div>
-	{/if}
 </section>
 
 <style>
@@ -129,7 +134,7 @@
 	}
 
 	.loader {
-		margin-top: 80px;
+		margin: 80px auto;
 		width: 45px;
 		aspect-ratio: 1;
 		--c: no-repeat linear-gradient(var(--color-text) 0 0);
